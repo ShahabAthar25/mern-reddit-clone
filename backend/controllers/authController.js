@@ -6,10 +6,9 @@ const { registerValidation, loginValidation } = require("../utils/validation");
 
 const register = async (req, res) => {
   // Validating Request
-  const { errors } = registerValidation(req.body);
-  if (errors) {
-    res.status(500).send({ message: errors });
-  }
+  const { error } = registerValidation(req.body);
+  console.log(error);
+  if (error) return res.status(400).send({ message: error });
 
   try {
     // genrate hashed password
@@ -33,8 +32,8 @@ const register = async (req, res) => {
 
 const login = async (req, res) => {
   // Validating Request
-  const { errors } = loginValidation(req.body);
-  if (errors) return res.status(400).send({ message: errors });
+  const { error } = loginValidation(req.body);
+  if (error) return res.status(400).send({ message: error });
 
   // checking if email is correct
   const user = await User.findOne({ email: req.body.email });
@@ -52,7 +51,7 @@ const login = async (req, res) => {
       expiresIn: "1d",
     }
   );
-  res.header("Authorization", token).send({ message: token });
+  res.header("Authorization", token).send({ token: token });
 };
 
 module.exports = {

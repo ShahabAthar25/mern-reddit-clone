@@ -3,6 +3,10 @@ const router = require("express").Router();
 const controller = require("../controllers/subRedditController");
 const isAuthenticated = require("../utils/check-auth");
 
-router.get("/", isAuthenticated, controller.detail);
+router.post("/", isAuthenticated, controller.createSubReddit);
+router.get("/:id", controller.detail);
+router.put("/:id", isAuthenticated, controller.updateSubReddit);
+router.delete("/:id", isAuthenticated, controller.deleteSubReddit);
+router.put("/join/:id", isAuthenticated, controller.join);
 
 module.exports = router;

@@ -18,6 +18,10 @@ const UserSchema = mongoose.Schema({
     require: true,
     min: 8,
   },
+  isAdmin: {
+    type: Boolean,
+    require: true,
+  },
   profilePic: {
     type: String,
     default: "",
@@ -26,7 +30,11 @@ const UserSchema = mongoose.Schema({
     type: Array,
     default: [],
   },
-  following: {
+  memberOf: {
+    type: Array,
+    default: [],
+  },
+  followings: {
     type: Array,
     default: [],
   },

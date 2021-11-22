@@ -1,3 +1,4 @@
+const { deleteOne } = require("../models/Post");
 const Post = require("../models/Post");
 const { postValidation } = require("../utils/validation");
 
@@ -17,10 +18,6 @@ const detail = async (req, res) => {
   } catch (err) {
     res.status(500).send({ message: err });
   }
-};
-
-const userPosts = async (req, res) => {
-  res.send(req.user);
 };
 
 const createPost = async (req, res) => {
@@ -44,12 +41,49 @@ const createPost = async (req, res) => {
   }
 };
 
-const updatePost = (req, res) => {
-  res.send({ message: "Function" });
+const updatePost = async (req, res) => {
+  if (
+    req.body.username ||
+    req.body.userId ||
+    req.body.subreddit ||
+    req.body._id ||
+    req.body.title
+  ) {
+    return res.status(403).send({ message: "you cannot access these fields" });
+  }
+
+  try {
+    const post = await Post.findById(req.params.id);
+    if (post.userId === req.user._id) {
+      await post.updateOne({ $set: req.body });
+      res.status(200).send({ message: "the post has been updated" });
+    } else {
+      res.status(403).send({ message: "you can update only your post" });
+    }
+  } catch (err) {
+    res.status(500).json(err);
+  }
 };
 
-const deletePost = (req, res) => {
-  res.send({ message: "Function" });
+const deletePost = async (req, res) => {
+  const post = await Post.findById(req.params.id);
+
+  try {
+    if (req.user._id === post.userId) {
+      try {
+        const deletedPost = await Post.findByIdAndDelete(req.params.id);
+        res.status(200).send({ message: "Post has been deleted" });
+      } catch (err) {
+        return res.status(500).send({ message: err });
+      }
+    } else {
+      return res.status(403).send({
+        message: "You do not have the permission for deleting this post",
+      });
+    }
+  } catch (err) {
+    res.status(404).send({ message: "Subreddit not found" });
+  }
 };
 
 module.exports = {
@@ -58,5 +92,4 @@ module.exports = {
   createPost,
   updatePost,
   deletePost,
-  userPosts,
 };

@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const SubRedditSchema = mongoose.Schema({
-  name: {
+  subRedditName: {
     type: String,
     require: true,
     min: 3,

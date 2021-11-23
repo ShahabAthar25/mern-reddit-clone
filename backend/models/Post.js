@@ -12,7 +12,13 @@ const PostSchema = mongoose.Schema({
     type: String,
     default: [],
   },
-  subreddit: {
+  subredditName: {
+    type: String,
+    require: true,
+    min: 3,
+    max: 60,
+  },
+  subredditId: {
     type: String,
     require: true,
     min: 3,

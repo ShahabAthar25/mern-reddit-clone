@@ -21,7 +21,7 @@ module.exports.loginValidation = (data) => {
 
 module.exports.subRedditValidation = (data) => {
   const schema = Joi.object({
-    name: Joi.string().required().min(3).max(60),
+    subRedditName: Joi.string().required().min(3).max(60),
   });
 
   return schema.validate(data);
@@ -32,7 +32,7 @@ module.exports.postValidation = (data) => {
     title: Joi.string().required().min(3).max(60),
     body: Joi.string(),
     photo: Joi.string(),
-    subreddit: Joi.string().required().min(3).max(60),
+    subredditId: Joi.string().required(),
   });
 
   return schema.validate(data);

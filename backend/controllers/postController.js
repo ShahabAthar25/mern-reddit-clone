@@ -1,5 +1,5 @@
-const { deleteOne } = require("../models/Post");
 const Post = require("../models/Post");
+const SubReddit = require("../models/SubReddit");
 const { postValidation } = require("../utils/validation");
 
 const index = async (req, res) => {
@@ -24,11 +24,17 @@ const createPost = async (req, res) => {
   const { error } = postValidation(req.body);
   if (error) res.status(400).send({ message: error });
 
+  const subreddit = await SubReddit.findById(req.body.subredditId);
+  if (!subreddit) {
+    return res.status(404).send({ message: "SubReddit not found" });
+  }
+
   const newPost = new Post({
     title: req.body.title,
     body: req.body.body,
     photo: req.body.photo,
-    subreddit: req.body.subreddit,
+    subredditName: subreddit.subRedditName,
+    subredditId: req.body.subredditId,
     username: req.user.username,
     userId: req.user._id,
   });
@@ -45,7 +51,8 @@ const updatePost = async (req, res) => {
   if (
     req.body.username ||
     req.body.userId ||
-    req.body.subreddit ||
+    req.body.subredditName ||
+    req.body.subredditId ||
     req.body._id ||
     req.body.title
   ) {

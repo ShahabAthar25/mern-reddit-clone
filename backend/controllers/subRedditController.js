@@ -1,4 +1,5 @@
 const SubReddit = require("../models/SubReddit");
+const Post = require("../models/Post");
 const User = require("../models/User");
 const { subRedditValidation } = require("../utils/validation");
 
@@ -8,10 +9,10 @@ const detail = (req, res) => {
 
 const createSubReddit = async (req, res) => {
   const { error } = subRedditValidation(req.body);
-  if (error) res.status(400).send({ message: error });
+  if (error) return res.status(400).send({ message: error });
 
   const newSubReddit = new SubReddit({
-    name: req.body.name,
+    subRedditName: req.body.subRedditName,
     ownerName: req.user.username,
     ownerId: req.user._id,
   });
@@ -49,6 +50,9 @@ const deleteSubReddit = async (req, res) => {
   try {
     if (req.user._id === subreddit.ownerId) {
       try {
+        const deletedPosts = await Post.deleteMany({
+          subreddit: req.params.id,
+        });
         const deletedSubreddit = await SubReddit.findByIdAndDelete(
           req.params.id
         );

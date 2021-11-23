@@ -1,3 +1,4 @@
+const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const express = require("express");
 const dotenv = require("dotenv");
@@ -19,6 +20,7 @@ mongoose.connect(process.env.MONGO_DB, () => {
 });
 
 // Middleware
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());

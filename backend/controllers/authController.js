@@ -46,15 +46,26 @@ const login = async (req, res) => {
 
   const token = jwt.sign(
     { _id: user.id, username: user.username },
-    process.env.SECRET_KEY,
-    {
-      expiresIn: "1d",
-    }
+    process.env.SECRET_KEY
   );
-  res.header("Authorization", token).send({ token: token });
+  res
+    .cookie("Authorization", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+    })
+    .send({ message: "Logged in successfully" });
+};
+
+const logout = (req, res) => {
+  try {
+    res.clearCookie("Authorization").send({ message: "Logged out" });
+  } catch (err) {
+    res.status(500).send({ message: err });
+  }
 };
 
 module.exports = {
   register,
   login,
+  logout,
 };

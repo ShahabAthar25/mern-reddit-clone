@@ -4,7 +4,7 @@ import "tailwindcss/tailwind.css";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <>
+    <div className="bg-reddit-dark h-screen">
       <Head>
         <title>Reddit</title>
         <meta charset="UTF-8" />
@@ -13,7 +13,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <Navbar />
       <Component {...pageProps} />
-    </>
+    </div>
   );
 }
 

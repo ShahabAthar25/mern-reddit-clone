@@ -22,7 +22,7 @@ const detail = async (req, res) => {
 
 const createPost = async (req, res) => {
   const { error } = postValidation(req.body);
-  if (error) res.status(400).send({ message: error });
+  if (error) return res.status(400).send({ message: error });
 
   const subreddit = await SubReddit.findById(req.body.subredditId);
   if (!subreddit) {

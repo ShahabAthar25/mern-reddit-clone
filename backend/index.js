@@ -7,6 +7,7 @@ const cors = require("cors");
 const authRoute = require("./routes/auth");
 const subRedditRoute = require("./routes/subReddit");
 const postRoute = require("./routes/post");
+const usersRoute = require("./routes/users");
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ app.use(helmet());
 app.use("/api/auth/", authRoute);
 app.use("/api/r/", subRedditRoute);
 app.use("/api/posts/", postRoute);
+app.use("/api/users/", usersRoute);
 
 // Starting server
 app.listen(PORT, () => {

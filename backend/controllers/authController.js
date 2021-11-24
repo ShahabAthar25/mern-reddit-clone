@@ -7,7 +7,6 @@ const { registerValidation, loginValidation } = require("../utils/validation");
 const register = async (req, res) => {
   // Validating Request
   const { error } = registerValidation(req.body);
-  console.log(error);
   if (error) return res.status(400).send({ message: error });
 
   try {
@@ -51,7 +50,7 @@ const login = async (req, res) => {
   res
     .cookie("Authorization", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
+      secure: process.env.NODE_ENV !== "development",
     })
     .send({ message: "Logged in successfully" });
 };

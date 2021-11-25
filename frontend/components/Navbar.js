@@ -13,7 +13,7 @@ function Navbar({ authenticated }) {
       <div className="flex items-center">
         <img
           src="/logosm.svg"
-          className="pr-4 h-10 sm:pr-2"
+          className="pr-4 h-10 sm:mr-2"
           alt="Logo was here"
         />
         <img
@@ -22,13 +22,14 @@ function Navbar({ authenticated }) {
           alt="Logo was here"
         />
       </div>
-      <div className="flex items-center bg-reddit-light rounded-full">
-        <Button className="rounded-full w-0">
+      <div className="flex-1 max-w-xs flex bg-reddit-light rounded-full">
+        <Button className="rounded-full">
           <SearchIcon className="text-gray-600" />
         </Button>
         <input
           type="text"
-          className="bg-transparent p-2 outline-none text-white font-light flex-[0.2]"
+          placeholder="Search Reddit"
+          className="bg-transparent p-2 outline-none text-white font-light flex-grow w-1"
         />
       </div>
       <div className="rounded-full">
@@ -36,8 +37,8 @@ function Navbar({ authenticated }) {
           <MenuIcon className="text-white" />
         </Button>
 
-        <div className={open ? `relative right-28` : `hidden`}>
-          <div className="absolute bg-reddit-light w-40 rounded-lg">
+        <div className={open ? `relative right-20` : `hidden`}>
+          <div className="absolute bg-reddit-light rounded-lg">
             {authenticated !== "" ? (
               <>
                 <Items text="Profile" Icon={AccountCircleIcon} />

@@ -1,1 +1,1 @@
-# mern-facebook-clone
+# mern-reddit-clone

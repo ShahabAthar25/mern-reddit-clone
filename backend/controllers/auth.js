@@ -32,7 +32,7 @@ const register = async (req, res) => {
     const user = await newUser.save();
     res.json(user);
   } catch (err) {
-    res.status(500).json({ message: err });
+    res.status(500).json(err);
   }
 };
 
@@ -54,7 +54,14 @@ const login = async (req, res) => {
     { _id: user._id, username: user.username },
     process.env.SECRET_KEY
   );
-  res.json({ token: token });
+  res.header("Authorization", token).json({
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    profilePic: user.profilePic,
+    joinedSubReddits: user.joinedSubReddits,
+    karma: user.karma,
+  });
 };
 
 module.exports = {

@@ -22,7 +22,7 @@ const userSchema = mongoose.Schema({
     type: String,
     default: "",
   },
-  subReddit: {
+  joinedSubReddits: {
     type: Array,
     default: [],
   },

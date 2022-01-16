@@ -26,6 +26,10 @@ const userSchema = mongoose.Schema({
     type: Array,
     default: [],
   },
+  likedPosts: {
+    type: Array,
+    default: [],
+  },
   karma: {
     type: Number,
     default: 0,

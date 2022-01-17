@@ -18,3 +18,11 @@ module.exports.loginValidation = (data) => {
 
   return schema.validate(data);
 };
+
+module.exports.subRedditValidation = (data) => {
+  const schema = Joi.object({
+    name: Joi.string().required().min(3).max(140),
+  });
+
+  return schema.validate(data);
+};

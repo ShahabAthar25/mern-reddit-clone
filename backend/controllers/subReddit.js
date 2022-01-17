@@ -1,8 +1,14 @@
 const SubReddit = require("../models/SubReddit");
 const { subRedditValidation } = require("../utils/validation");
 
-const getSubReddit = (req, res) => {
-  res.json("Hello");
+const getSubReddit = async (req, res) => {
+  try {
+    const subReddits = await SubReddit.find({});
+
+    res.json(subReddits);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const getSubRedditById = (req, res) => {

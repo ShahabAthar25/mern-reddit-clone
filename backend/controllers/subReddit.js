@@ -11,8 +11,14 @@ const getSubReddit = async (req, res) => {
   }
 };
 
-const getSubRedditById = (req, res) => {
-  res.json("Hello");
+const getSubRedditById = async (req, res) => {
+  try {
+    const subReddit = await SubReddit.findById(req.params.id);
+
+    res.json(subReddit);
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const createSubReddit = async (req, res) => {

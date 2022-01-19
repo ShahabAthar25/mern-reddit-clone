@@ -3,6 +3,7 @@ const { subRedditValidation } = require("../utils/validation");
 
 const getSubReddit = async (req, res) => {
   try {
+    // Getting all subreddits
     const subReddits = await SubReddit.find({});
 
     res.json(subReddits);
@@ -13,6 +14,7 @@ const getSubReddit = async (req, res) => {
 
 const getSubRedditById = async (req, res) => {
   try {
+    // Getting one subreddit by id
     const subReddit = await SubReddit.findById(req.params.id);
 
     res.json(subReddit);
@@ -35,6 +37,7 @@ const createSubReddit = async (req, res) => {
       ownerId: req.user._id,
     });
 
+    // Saving subreddit to database
     const subReddit = await newSubReddit.save();
     res.json(subReddit);
   } catch (error) {
@@ -42,8 +45,28 @@ const createSubReddit = async (req, res) => {
   }
 };
 
-const updateSubReddit = (req, res) => {
-  res.json("Hello");
+const updateSubReddit = async (req, res) => {
+  try {
+    // finding the subreddit to update
+    const subReddit = await SubReddit.findById(req.params.id);
+
+    // if user is not the owner of the subreddit then denying permission
+    if (req.user._id === subReddit.ownerId) {
+      // updating the subreddit
+      const updatedSubReddit = await SubReddit.findByIdAndUpdate(
+        req.params.id,
+        {
+          $set: req.body,
+        }
+      );
+
+      res.json(updatedSubReddit);
+    } else {
+      return res.sendStatus(403);
+    }
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const deleteSubReddit = (req, res) => {

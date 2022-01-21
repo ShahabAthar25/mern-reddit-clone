@@ -53,14 +53,11 @@ const updateSubReddit = async (req, res) => {
     // if user is not the owner of the subreddit then denying permission
     if (req.user._id === subReddit.ownerId) {
       // updating the subreddit
-      const updatedSubReddit = await SubReddit.findByIdAndUpdate(
-        req.params.id,
-        {
-          $set: req.body,
-        }
-      );
+      const updatedSubReddit = await subReddit.updateOne({
+        $set: req.body,
+      });
 
-      res.json(updatedSubReddit);
+      res.json("SubReddit has been updated");
     } else {
       return res.sendStatus(403);
     }
@@ -69,8 +66,20 @@ const updateSubReddit = async (req, res) => {
   }
 };
 
-const deleteSubReddit = (req, res) => {
-  res.json("Hello");
+const deleteSubReddit = async (req, res) => {
+  try {
+    const subReddit = await SubReddit.findById(req.params.id);
+
+    if (subReddit.ownerId === req.user._id) {
+      const deletedSubReddit = await subReddit.deleteOne();
+
+      res.json("Subreddit has been deleted");
+    } else {
+      res.sendStatus(403);
+    }
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const joinSubReddit = (req, res) => {

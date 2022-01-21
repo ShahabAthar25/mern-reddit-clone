@@ -68,9 +68,12 @@ const updateSubReddit = async (req, res) => {
 
 const deleteSubReddit = async (req, res) => {
   try {
+    // getting the subreddit
     const subReddit = await SubReddit.findById(req.params.id);
 
+    // checking if the user is the creator of the subreddit
     if (subReddit.ownerId === req.user._id) {
+      // deleting the subreddit
       const deletedSubReddit = await subReddit.deleteOne();
 
       res.json("Subreddit has been deleted");
@@ -82,8 +85,30 @@ const deleteSubReddit = async (req, res) => {
   }
 };
 
-const joinSubReddit = (req, res) => {
-  res.json("Hello");
+const joinSubReddit = async (req, res) => {
+  try {
+    // getting the subreddit
+    const subReddit = await SubReddit.findById(req.params.id);
+
+    // checking if the user has already joined the subreddit
+    if (!subReddit.members.includes(req.user._id)) {
+      // adding user id to members array
+      const joinedUser = await subReddit.updateOne({
+        $push: { members: req.user._id },
+      });
+
+      res.json(`Joined r/${subReddit.name}`);
+    } else {
+      // removing user id from members array
+      const leftUser = await subReddit.updateOne({
+        $pull: { members: req.user._id },
+      });
+
+      res.json(`Left r/${subReddit.name}`);
+    }
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const addMod = (req, res) => {

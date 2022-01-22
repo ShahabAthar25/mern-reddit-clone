@@ -142,8 +142,38 @@ const addMod = async (req, res) => {
   }
 };
 
-const addRule = (req, res) => {
-  res.json("Hello");
+const addRule = async (req, res) => {
+  try {
+    // getting the subreddit
+    const subReddit = await SubReddit.findById(req.params.id);
+
+    // Checking if the user is the owner or a mod
+    if (
+      subReddit.ownerId === req.user._id ||
+      subReddit.mods.includes(req.body.modId)
+    ) {
+      // checking if the user is already a mod
+      if (!subReddit.rules.includes(req.body.rule)) {
+        // adding rule to rule array
+        const addedRule = await subReddit.updateOne({
+          $push: { rules: req.body.rule },
+        });
+
+        res.json(`Added Rule ${req.body.rule}`);
+      } else {
+        // removing rule from rules array
+        const removedRule = await subReddit.updateOne({
+          $pull: { rules: req.body.rule },
+        });
+
+        res.json(`Removed Rule ${req.body.rule}`);
+      }
+    } else {
+      res.sendStatus(403);
+    }
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 module.exports = {

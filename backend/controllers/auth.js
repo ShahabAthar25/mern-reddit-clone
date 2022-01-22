@@ -8,7 +8,7 @@ const User = require("../models/User");
 const register = async (req, res) => {
   // Validating Request
   const { error } = registerValidation(req.body);
-  if (error) return res.status(400).json({ message: error.details[0].message });
+  if (error) return res.status(400).json(error.details[0].message);
 
   try {
     const userExist = await User.findOne({ username: req.body.username });

@@ -26,3 +26,13 @@ module.exports.subRedditValidation = (data) => {
 
   return schema.validate(data);
 };
+
+module.exports.postValidation = (data) => {
+  const schema = Joi.object({
+    title: Joi.string().required().min(3),
+    body: Joi.string(),
+    image: Joi.string(),
+  });
+
+  return schema.validate(data);
+};

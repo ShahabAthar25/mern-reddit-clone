@@ -27,8 +27,7 @@ const createSubReddit = async (req, res) => {
   try {
     // Validating Request
     const { error } = subRedditValidation(req.body);
-    if (error)
-      return res.status(400).json({ message: error.details[0].message });
+    if (error) return res.status(400).json(error.details[0].message);
 
     // Creating new subreddit
     const newSubReddit = new SubReddit({

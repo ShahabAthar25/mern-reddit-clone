@@ -58,8 +58,8 @@ const updatePost = async (req, res) => {
     // finding the subreddit to update
     const post = await Post.findById(req.params.id);
 
-    // getting subreddit to check weather
-    const subReddit = await SubReddit.findById(req.params.id);
+    // getting subreddit to check weather the user is a mod
+    const subReddit = await SubReddit.findById(post.ownerId);
 
     // if user is not the owner of the subreddit then denying permission
     if (
@@ -81,7 +81,30 @@ const updatePost = async (req, res) => {
 };
 
 const deletePost = async (req, res) => {
-  res.json("Hello World");
+  try {
+    // finding the subreddit to update
+    const post = await Post.findById(req.params.id);
+
+    // getting subreddit to check weather user is a mod
+    const subReddit = await SubReddit.findById(post.ownerId);
+
+    // if user is not the owner of the subreddit then denying permission
+    if (
+      req.user._id === post.ownerId ||
+      subReddit.mods.includes(req.body.modId)
+    ) {
+      // deleting the subreddit
+      const deletedPost = await post.deleteOne({
+        $set: req.body,
+      });
+
+      res.json("Post has been deleted");
+    } else {
+      return res.sendStatus(403);
+    }
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const likePost = async (req, res) => {

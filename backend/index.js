@@ -7,6 +7,7 @@ const dotenv = require("dotenv");
 
 const authController = require("./routes/auth");
 const subRedditController = require("./routes/subReddit");
+const postController = require("./routes/post");
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use(cors());
 
 app.use("/api/auth", authController);
 app.use("/api/subreddit", subRedditController);
+app.use("/api/posts", postController);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

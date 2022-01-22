@@ -30,18 +30,22 @@ const createPost = async (req, res) => {
     const { error } = postValidation(req.body);
     if (error) return res.status(400).json(error.details[0].message);
 
+    // Getting subreddit to get its id, name and pic
     const subReddit = await SubReddit.findById(req.params.id);
 
+    // Creating a post
     const newPost = new Post({
       title: req.body.title,
       body: req.body.body,
       image: req.body.image,
       owner: req.user.username,
       ownerId: req.user._id,
-      subReddit: subReddit._id,
+      subReddit: subReddit.name,
+      subRedditId: subReddit._id,
       subRedditPic: subReddit.pic,
     });
 
+    // Saving post to database
     const post = await newPost.save();
     res.json(post);
   } catch (error) {
@@ -50,7 +54,30 @@ const createPost = async (req, res) => {
 };
 
 const updatePost = async (req, res) => {
-  res.json("Hello World");
+  try {
+    // finding the subreddit to update
+    const post = await Post.findById(req.params.id);
+
+    // getting subreddit to check weather
+    const subReddit = await SubReddit.findById(req.params.id);
+
+    // if user is not the owner of the subreddit then denying permission
+    if (
+      req.user._id === post.ownerId ||
+      subReddit.mods.includes(req.body.modId)
+    ) {
+      // updating the subreddit
+      const updatedPost = await post.updateOne({
+        $set: req.body,
+      });
+
+      res.json("Post has been updated");
+    } else {
+      return res.sendStatus(403);
+    }
+  } catch (error) {
+    res.sendStatus(500);
+  }
 };
 
 const deletePost = async (req, res) => {

@@ -107,11 +107,40 @@ const deletePost = async (req, res) => {
   }
 };
 
-const likePost = async (req, res) => {
-  res.json("Hello World");
+const upvotePost = async (req, res) => {
+  try {
+    // getting post
+    const post = await Post.findById(req.params.id);
+
+    // getting the subreddit
+    const subReddit = await SubReddit.findById(post.subRedditId);
+
+    // checking if the user has already liked the post
+    if (
+      !post.likes.includes(req.user._id) &&
+      !post.disLikes.includes(req.user._id)
+    ) {
+      // adding user id to the likes array
+      const upvote = await post.updateOne({
+        $push: { likes: req.user._id },
+      });
+
+      res.json(`Upvoted post with the title of ${post.title}`);
+    } else {
+      // removing user id from likes array
+      const removeUpvote = await post.updateOne({
+        $pull: { likes: req.user._id },
+      });
+
+      res.json(`Removed upvote with the title of ${post.title}`);
+    }
+  } catch (error) {
+    console.log(error);
+    res.sendStatus(500);
+  }
 };
 
-const dislikePost = async (req, res) => {
+const downvotePost = async (req, res) => {
   res.json("Hello World");
 };
 
@@ -121,6 +150,6 @@ module.exports = {
   createPost,
   updatePost,
   deletePost,
-  likePost,
-  dislikePost,
+  upvotePost,
+  downvotePost,
 };

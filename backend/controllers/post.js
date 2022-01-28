@@ -116,15 +116,15 @@ const upvotePost = async (req, res) => {
     if (!post.likes.includes(req.user._id)) {
       // adding user id to the likes array
       const upvote = await post.updateOne({
-        $push: { likes: req.user._id },
-        $pull: { disLikes: req.user._id },
+        $push: { upVotes: req.user._id },
+        $pull: { downVotes: req.user._id },
       });
 
       res.json(`Upvoted post with the title of ${post.title}`);
     } else {
       // removing user id from likes array
       const removeUpvote = await post.updateOne({
-        $pull: { likes: req.user._id },
+        $pull: { upVotes: req.user._id },
       });
 
       res.json(`Removed upvote on post with the title of ${post.title}`);
@@ -144,15 +144,15 @@ const downvotePost = async (req, res) => {
     if (!post.disLikes.includes(req.user._id)) {
       // adding user id to the likes array
       const downvote = await post.updateOne({
-        $push: { disLikes: req.user._id },
-        $pull: { likes: req.user._id },
+        $push: { downVotes: req.user._id },
+        $pull: { upVotes: req.user._id },
       });
 
       res.json(`Downvoted post with the title of ${post.title}`);
     } else {
       // removing user id from likes array
       const removeUpvote = await post.updateOne({
-        $pull: { likes: req.user._id },
+        $pull: { downVotes: req.user._id },
       });
 
       res.json(`Removed downvote on post with the title of ${post.title}`);

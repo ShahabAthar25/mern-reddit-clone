@@ -1,17 +1,13 @@
 const mongoose = require("mongoose");
 
-const postSchema = mongoose.Schema({
-  title: {
-    type: String,
-    require: true,
-  },
+const commentSchema = mongoose.Schema({
   body: {
     type: String,
     require: true,
   },
-  image: {
+  postId: {
     type: String,
-    default: "",
+    require: true,
   },
   owner: {
     type: String,
@@ -21,15 +17,7 @@ const postSchema = mongoose.Schema({
     type: String,
     require: true,
   },
-  subReddit: {
-    type: String,
-    require: true,
-  },
-  subRedditId: {
-    type: String,
-    require: true,
-  },
-  subRedditPic: {
+  ownerPic: {
     type: String,
     require: true,
   },
@@ -43,4 +31,4 @@ const postSchema = mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model("Post", postSchema);
+module.exports = mongoose.model("Comment", commentSchema);

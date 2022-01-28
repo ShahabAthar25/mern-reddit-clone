@@ -8,7 +8,7 @@ router.get("/:id", controller.getPost);
 router.post("/:id", authorization, controller.createPost);
 router.put("/:id", authorization, controller.updatePost);
 router.delete("/:id", authorization, controller.deletePost);
-router.put("/like/:id", authorization, controller.upvotePost);
-router.put("/dislike/:id", authorization, controller.downvotePost);
+router.put("/upvote/:id", authorization, controller.upvotePost);
+router.put("/downvote/:id", authorization, controller.downvotePost);
 
 module.exports = router;

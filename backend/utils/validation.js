@@ -37,3 +37,12 @@ module.exports.postValidation = (data) => {
 
   return schema.validate(data);
 };
+
+module.exports.commentValidation = (data) => {
+  const schema = Joi.object({
+    body: Joi.string(),
+    postId: Joi.string().required(),
+  });
+
+  return schema.validate(data);
+};

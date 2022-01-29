@@ -1,4 +1,6 @@
 const Comment = require("../models/Comment");
+const User = require("../models/User");
+const { commentValidation } = require("../utils/validation");
 
 const comments = async (req, res) => {
   try {
@@ -11,16 +13,41 @@ const comments = async (req, res) => {
 };
 const createComment = async (req, res) => {
   try {
-    res.json("Hello World");
+    const { error } = commentValidation(req.body);
+    if (error) return res.status(400).json(error.details[0].message);
+
+    const user = await User.findById(req.user._id);
+
+    const newComment = new Comment({
+      body: req.body.body,
+      postId: req.body.postId,
+      owner: req.user.username,
+      ownerId: req.user._id,
+      ownerPic: user.profilePic,
+    });
+
+    const comment = await newComment.save();
+    res.json(comment);
   } catch (error) {
     res.sendStatus(500);
   }
 };
 const updateComment = async (req, res) => {
   try {
-    res.json("Hello World");
+    const comment = await Comment.findById(req.params.id);
+
+    if (req.user._id === comment.ownerId) {
+      const updatedComment = await comment.updateOne({
+        $set: req.body,
+      });
+
+      res.json("comment updated");
+    } else {
+      res.sendStatus(403);
+    }
   } catch (error) {
-    res.sendStatus(500);
+    res.send(error);
+    console.log(error);
   }
 };
 const deleteComment = async (req, res) => {

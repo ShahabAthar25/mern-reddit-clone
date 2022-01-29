@@ -32,6 +32,7 @@ module.exports.postValidation = (data) => {
     title: Joi.string().required().min(3),
     body: Joi.string(),
     image: Joi.string(),
+    subRedditId: Joi.string().required(),
   });
 
   return schema.validate(data);

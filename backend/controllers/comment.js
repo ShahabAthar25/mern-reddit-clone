@@ -1,6 +1,10 @@
+const Comment = require("../models/Comment");
+
 const comments = async (req, res) => {
   try {
-    res.json("Hello World");
+    const comments = await Comment.find({ postId: req.params.id });
+
+    res.json(comments);
   } catch (error) {
     res.sendStatus(500);
   }

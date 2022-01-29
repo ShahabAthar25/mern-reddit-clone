@@ -31,7 +31,7 @@ const createPost = async (req, res) => {
     if (error) return res.status(400).json(error.details[0].message);
 
     // Getting subreddit to get its id, name and pic
-    const subReddit = await SubReddit.findById(req.params.id);
+    const subReddit = await SubReddit.findById(req.body.subRedditId);
 
     // Creating a post
     const newPost = new Post({
@@ -113,7 +113,7 @@ const upvotePost = async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     // checking if the user has already liked the post
-    if (!post.likes.includes(req.user._id)) {
+    if (!post.upVotes.includes(req.user._id)) {
       // adding user id to the likes array
       const upvote = await post.updateOne({
         $push: { upVotes: req.user._id },
@@ -130,7 +130,6 @@ const upvotePost = async (req, res) => {
       res.json(`Removed upvote on post with the title of ${post.title}`);
     }
   } catch (error) {
-    console.log(error);
     res.sendStatus(500);
   }
 };
@@ -141,7 +140,7 @@ const downvotePost = async (req, res) => {
     const post = await Post.findById(req.params.id);
 
     // checking if the user has already disliked the post
-    if (!post.disLikes.includes(req.user._id)) {
+    if (!post.downVotes.includes(req.user._id)) {
       // adding user id to the likes array
       const downvote = await post.updateOne({
         $push: { downVotes: req.user._id },
@@ -158,7 +157,6 @@ const downvotePost = async (req, res) => {
       res.json(`Removed downvote on post with the title of ${post.title}`);
     }
   } catch (error) {
-    console.log(error);
     res.sendStatus(500);
   }
 };

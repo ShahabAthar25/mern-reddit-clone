@@ -46,13 +46,20 @@ const updateComment = async (req, res) => {
       res.sendStatus(403);
     }
   } catch (error) {
-    res.send(error);
-    console.log(error);
+    res.sendStatus(500);
   }
 };
 const deleteComment = async (req, res) => {
   try {
-    res.json("Hello World");
+    const comment = await Comment.findById(req.params.id);
+
+    if (req.user._id === comment.ownerId) {
+      const deletedComment = await comment.deleteOne();
+
+      res.json("comment deleted");
+    } else {
+      res.sendStatus(403);
+    }
   } catch (error) {
     res.sendStatus(500);
   }

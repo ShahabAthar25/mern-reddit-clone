@@ -66,8 +66,24 @@ const deleteComment = async (req, res) => {
 };
 const upvoteComment = async (req, res) => {
   try {
-    res.json("Hello World");
+    const comment = await Comment.findById(req.params.id);
+
+    if (!comment.upVotes.includes(req.user._id)) {
+      const upVotedComment = await comment.updateOne({
+        $push: { upVotes: req.user._id },
+        $pull: { downVotes: req.user._id },
+      });
+
+      res.json(`You upvoted comment with the body of ${comment.body}`);
+    } else {
+      const removeUpVotedComment = await comment.updateOne({
+        $pull: { upVotes: req.user._id },
+      });
+
+      res.json(`You upvoted comment with the body of ${comment.body}`);
+    }
   } catch (error) {
+    console.log(error);
     res.sendStatus(500);
   }
 };

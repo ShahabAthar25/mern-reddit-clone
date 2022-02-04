@@ -1,5 +1,6 @@
 const Post = require("../models/Post");
 const SubReddit = require("../models/SubReddit");
+const User = require("../models/User");
 const { postValidation } = require("../utils/validation");
 
 const getRecommendation = async (req, res) => {
@@ -118,6 +119,10 @@ const upvotePost = async (req, res) => {
       const upvote = await post.updateOne({
         $push: { upVotes: req.user._id },
         $pull: { downVotes: req.user._id },
+      });
+
+      const likedPost = await User.findByIdAndUpdate(req.user._id, {
+        $addToSet: { likedPosts: post._id },
       });
 
       res.json(`Upvoted post with the title of ${post.title}`);

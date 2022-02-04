@@ -22,10 +22,6 @@ const userSchema = mongoose.Schema({
     type: String,
     default: "",
   },
-  joinedSubReddits: {
-    type: Array,
-    default: [],
-  },
   likedPosts: {
     type: Array,
     default: [],

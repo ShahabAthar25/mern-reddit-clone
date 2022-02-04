@@ -121,10 +121,12 @@ const upvotePost = async (req, res) => {
         $pull: { downVotes: req.user._id },
       });
 
+      // Adding liked post for recommendations
       const likedPost = await User.findByIdAndUpdate(req.user._id, {
         $addToSet: { likedPosts: post._id },
       });
 
+      // Adding 10 karma
       const karma = await User.findByIdAndUpdate(post.ownerId, {
         $inc: { karma: 10 },
       });
@@ -136,6 +138,7 @@ const upvotePost = async (req, res) => {
         $pull: { upVotes: req.user._id },
       });
 
+      // Removing 10 karma
       const karma = await User.findByIdAndUpdate(post.ownerId, {
         $inc: { karma: -10 },
       });

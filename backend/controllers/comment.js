@@ -74,10 +74,18 @@ const upvoteComment = async (req, res) => {
         $pull: { downVotes: req.user._id },
       });
 
+      const karma = await User.findByIdAndUpdate(comment.ownerId, {
+        $inc: { karma: 10 },
+      });
+
       res.json(`You upvoted comment with the body of ${comment.body}`);
     } else {
       const removeUpVotedComment = await comment.updateOne({
         $pull: { upVotes: req.user._id },
+      });
+
+      const karma = await User.findByIdAndUpdate(comment.ownerId, {
+        $inc: { karma: -10 },
       });
 
       res.json(

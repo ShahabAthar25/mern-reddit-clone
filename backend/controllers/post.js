@@ -125,11 +125,19 @@ const upvotePost = async (req, res) => {
         $addToSet: { likedPosts: post._id },
       });
 
+      const karma = await User.findByIdAndUpdate(post.ownerId, {
+        $inc: { karma: 10 },
+      });
+
       res.json(`Upvoted post with the title of ${post.title}`);
     } else {
       // removing user id from likes array
       const removeUpvote = await post.updateOne({
         $pull: { upVotes: req.user._id },
+      });
+
+      const karma = await User.findByIdAndUpdate(post.ownerId, {
+        $inc: { karma: -10 },
       });
 
       res.json(`Removed upvote on post with the title of ${post.title}`);

@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory, Link } from "react-router-dom";
 
 import { login } from "../redux/actions/auth";
 
 export default function Login() {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,14 +14,14 @@ export default function Login() {
   const error = useSelector((state) => state.error);
   const [loading, setLoading] = useState(false);
 
-  console.log(error);
-
   const handleOnClick = (e) => {
     e.preventDefault();
 
     setLoading(true);
     dispatch(login(email, password));
     setLoading(false);
+
+    if (!error.message) history.push("/");
   };
 
   if (loading) {
@@ -30,7 +32,7 @@ export default function Login() {
     <div className="h-screen w-screen flex items-center justify-center bg-gray-200">
       <div className="border shadow-2xl flex flex-col px-4 py-8 bg-white flex-grow max-w-lg">
         <div className="flex flex-col mt-4 mb-8">
-          <h1 className="text-3xl">LOGIN</h1>
+          <h1 className="text-3xl uppercase">login</h1>
           <p className="text-gray-600 text-sm">Welcome to a reddit clone</p>
         </div>
         <form className="space-y-6 flex flex-col flex-grow">
@@ -63,6 +65,11 @@ export default function Login() {
             Login
           </button>
         </form>
+        <div className="text-sm text-gray-400 text-center mt-4">
+          <Link to="/login" className="hover:underline">
+            Already have a account?
+          </Link>
+        </div>
       </div>
     </div>
   );

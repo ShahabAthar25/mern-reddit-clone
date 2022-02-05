@@ -1,9 +1,27 @@
-import React from "react";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+
+import { login } from "../redux/actions/auth";
 
 export default function Login() {
+  const dispatch = useDispatch();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
   const handleOnClick = (e) => {
     e.preventDefault();
+
+    setLoading(true);
+    dispatch(login(email, password));
+    setLoading(false);
   };
+
+  if (loading) {
+    return <h1>Loading</h1>;
+  }
 
   return (
     <div className="h-screen w-screen flex items-center justify-center bg-gray-200">
@@ -17,11 +35,17 @@ export default function Login() {
             type="text"
             placeholder="Email"
             className="bg-transparent px-3 py-2 border-b flex-grow focus-within:outline-none"
+            autoComplete="on"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <input
-            type="text"
+            type="password"
             placeholder="Password"
             className="bg-transparent px-3 py-2 border-b flex-grow focus-within:outline-none"
+            autoComplete="on"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <button
             type="submit"

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 import { login } from "../redux/actions/auth";
 
@@ -9,7 +9,10 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const error = useSelector((state) => state.error);
   const [loading, setLoading] = useState(false);
+
+  console.log(error);
 
   const handleOnClick = (e) => {
     e.preventDefault();
@@ -47,6 +50,11 @@ export default function Login() {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
+          {error.message && (
+            <h1 className="text-sm text-red-400 text-center">
+              {error.message}
+            </h1>
+          )}
           <button
             type="submit"
             onClick={handleOnClick}

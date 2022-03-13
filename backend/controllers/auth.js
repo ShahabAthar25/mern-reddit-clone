@@ -3,6 +3,8 @@ const bcrypt = require("bcrypt");
 
 const { registerValidation, loginValidation } = require("../utils/validation");
 const User = require("../models/User");
+const RefreshToken = require("../models/RefreshToken");
+const generateAccessToken = require("../utils/generateAccessToken");
 
 // Registering a user
 const register = async (req, res) => {
@@ -49,22 +51,76 @@ const login = async (req, res) => {
   const validPassword = await bcrypt.compare(req.body.password, user.password);
   if (!validPassword) return res.status(404).json("Invalid email or password");
 
-  // genrating a jwt
-  const token = jwt.sign(
-    { _id: user._id, username: user.username },
-    process.env.SECRET_KEY
+  const payload = {
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    profilePic: user.profilePic,
+    likedPost: user.likedPosts,
+    karma: user.karma,
+  };
+
+  // creating an access token
+  const accessToken = generateAccessToken(payload);
+
+  // creating a refresh token
+  const refreshToken = jwt.sign(
+    user.toJSON(),
+    process.env.REFRESH_TOKEN_SECRET
   );
-  res.header("Authorization", token).json({
+
+  const newRefreshToken = RefreshToken({
+    refreshToken: refreshToken,
+  });
+
+  try {
+    await newRefreshToken.save();
+  } catch (error) {
+    return res.sendStatus(500);
+  }
+
+  res.json({
     _id: user._id,
     username: user.username,
     email: user.email,
     profilePic: user.profilePic,
     joinedSubReddits: user.joinedSubReddits,
     karma: user.karma,
+    accessToken: accessToken,
+    refreshToken: refreshToken,
   });
+};
+
+const refresh = async (req, res) => {
+  const refreshToken = req.body.token;
+  const _refreshToken = await RefreshToken.findOne({
+    refreshToken: refreshToken,
+  });
+  if (refreshToken == null) return res.sendStatus(401);
+  if (!_refreshToken) return res.sendStatus(403);
+  jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
+    if (err) return res.sendStatus(403);
+    const payload = {
+      _id: user._id,
+      username: user.username,
+      email: user.email,
+      profilePic: user.profilePic,
+      likedPost: user.likedPosts,
+      karma: user.karma,
+    };
+    const accessToken = generateAccessToken(payload);
+    res.json({ accessToken: accessToken });
+  });
+};
+
+const logout = async (req, res) => {
+  await RefreshToken.findOneAndDelete({ refreshToken: req.body.token });
+  res.json("Successfully loggedout");
 };
 
 module.exports = {
   register,
   login,
+  refresh,
+  logout,
 };

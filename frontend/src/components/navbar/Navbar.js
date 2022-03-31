@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ReactComponent as LogoImg } from "../images/logo_img.svg";
+import { ReactComponent as LogoImg } from "../../images/logo_img.svg";
 import {
   SearchIcon,
   UserIcon,
@@ -17,8 +17,8 @@ import {
 import Switch from "@mui/material/Switch";
 
 import MenuOption from "./MenuOption";
-import Modal from "./Modal";
-import useDarkMode from "../hooks/useDarkMode";
+import Modal from "../modal/Modal";
+import useDarkMode from "../../hooks/useDarkMode";
 
 export default function Navbar() {
   const [colorTheme, setTheme] = useDarkMode();
@@ -99,7 +99,7 @@ export default function Navbar() {
           </div>
         )}
       </div>
-      <Modal open={open} setOpen={setOpen} title="Login" />
+      <Modal open={open} setOpen={setOpen} view="login" />
     </div>
   );
 }

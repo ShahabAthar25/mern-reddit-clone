@@ -9,7 +9,24 @@ const initialState = {
 export const loginSlice = createSlice({
   name: "login",
   initialState,
-  reducers: {},
+  reducers: {
+    loginPending: (state) => {
+      state.isLoading = true;
+    },
+    loginSuccess: (state) => {
+      state.isLoading = false;
+      state.isAuth = true;
+      state.error = "";
+    },
+    loginFail: (state, { payload }) => {
+      state.isLoading = false;
+      state.error = payload;
+    },
+  },
 });
 
-export default loginSlice.reducer;
+const { reducer, actions } = loginSlice;
+
+export const { loginPending, loginSuccess, loginFail } = actions;
+
+export default reducer;

@@ -24,7 +24,7 @@ export default function Modal({ open, setOpen, view }) {
             className="rounded-bl h-full w-32"
           />
         </div>
-        <div className="flex-[0.8] h-full mx-2 relative">
+        <div className="flex-[0.8] h-full mx-2 relative flex">
           <button
             className="cursor-pointer top-2 right-0 absolute"
             onClick={() => setOpen(!open)}

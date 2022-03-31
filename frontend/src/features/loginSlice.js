@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isLoading: false,
   isAuth: false,
-  error: "",
+  error: "Dummy Error",
 };
 
 export const loginSlice = createSlice({

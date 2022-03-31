@@ -1,16 +1,40 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import {
+  loginPending,
+  loginSuccess,
+  loginFail,
+} from "../../features/loginSlice";
+import axios from "../../api/axios";
 
 export default function Login() {
   const dispatch = useDispatch();
 
-  const { isLoading, isAuth, error } = useSelector((state) => state.login);
+  const { isLoading, error } = useSelector((state) => state.login);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
+
+    if (!email || !password)
+      return dispatch(loginFail("Please fill up all the fields."));
+
+    dispatch(loginPending());
+
+    try {
+      const { data, status } = await axios.post("/auth/login", {
+        email,
+        password,
+      });
+
+      if (status === "error") return dispatch(loginFail(data.error));
+
+      dispatch(loginSuccess());
+    } catch (error) {
+      dispatch(loginFail(error.response.data));
+    }
   };
 
   return (
@@ -28,7 +52,7 @@ export default function Login() {
         <input
           type="text"
           placeholder="Email"
-          className="max-w-xs px-3 py-3 bg-[#fcfcfb] ring-1 ring-gray-300 rounded outline-none text-gray-500 flex-grow"
+          className="max-w-xs px-3 py-3 bg-[#fcfcfb] ring-1 ring-gray-300 rounded outline-none text-gray-500 flex-grow mr-4"
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -36,7 +60,7 @@ export default function Login() {
         <input
           type="password"
           placeholder="Password"
-          className="max-w-xs px-3 py-3 bg-[#fcfcfb] ring-1 ring-gray-300 rounded outline-none text-gray-500 flex-grow"
+          className="max-w-xs px-3 py-3 bg-[#fcfcfb] ring-1 ring-gray-300 rounded outline-none text-gray-500 flex-grow mr-4"
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -47,13 +71,13 @@ export default function Login() {
           </div>
         )}
         <button
-          className="bg-[#0079d3] rounded-full px-3 py-2 text-white max-w-xs flex-grow flex items-center justify-center"
+          className="bg-[#0079d3] rounded-full px-3 py-2 text-white max-w-xs flex-grow flex items-center justify-center mr-4"
           onClick={(e) => handleOnSubmit(e)}
         >
           {isLoading ? (
             <div
               style={{ borderTopColor: "transparent" }}
-              class="w-6 h-6 border-2 border-white border-solid rounded-full animate-spin"
+              className="w-6 h-6 border-2 border-white border-solid rounded-full animate-spin"
             ></div>
           ) : (
             <span>Login</span>

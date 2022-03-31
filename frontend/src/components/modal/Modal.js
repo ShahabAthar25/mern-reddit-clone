@@ -1,9 +1,4 @@
 import { XIcon } from "@heroicons/react/outline";
-import {
-  loginPending,
-  loginSuccess,
-  loginFail,
-} from "../../features/loginSlice";
 import Login from "./Login";
 import Signup from "./Signup";
 

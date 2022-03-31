@@ -42,7 +42,9 @@ export default function Login() {
           onChange={(e) => setPassword(e.target.value)}
         />
         {error && (
-          <h1 className="text-sm text-red-500 my-2 items-center">{error}</h1>
+          <div className="flex items-center justify-center max-w-xs">
+            <h1 className="text-sm text-red-500 my-2 items-center">{error}</h1>
+          </div>
         )}
         <button
           className="bg-[#0079d3] rounded-full px-3 py-2 text-white max-w-xs flex-grow flex items-center justify-center"

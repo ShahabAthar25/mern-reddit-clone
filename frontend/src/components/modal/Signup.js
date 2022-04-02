@@ -1,9 +1,41 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { switchToLogin } from "../../features/modalSlice";
+import {
+  registerPending,
+  registerSuccess,
+  registerFail,
+} from "../../features/registerSlice";
+import axios from "../../api/axios";
 
-export default function Login() {
+export default function Signup() {
+  const dispatch = useDispatch();
+
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!username || !email || !password)
+      return dispatch(registerFail("Please fill up all the fields."));
+
+    dispatch(registerPending());
+
+    try {
+      await axios.post("/auth/register", {
+        username,
+        email,
+        password,
+      });
+
+      dispatch(registerSuccess());
+      dispatch(switchToLogin());
+    } catch (error) {
+      dispatch(registerFail(error.response.data));
+    }
+  };
 
   return (
     <div>
@@ -41,7 +73,10 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className="bg-[#0079d3] rounded-full px-3 py-2 text-white max-w-xs">
+        <button
+          className="bg-[#0079d3] rounded-full px-3 py-2 text-white max-w-xs"
+          onClick={(e) => handleOnSubmit(e)}
+        >
           Sign up
         </button>
         <div className="text-xs text-gray-600">
@@ -51,8 +86,13 @@ export default function Login() {
         </div>
       </form>
       <h1 className="text-xs absolute bottom-12 mx-2">
-        New to Reddit?{" "}
-        <span className="text-blue-500 font-medium uppercase">sign up</span>
+        Already a redditor?{" "}
+        <button
+          className="text-blue-500 font-medium uppercase"
+          onClick={() => dispatch(switchToLogin())}
+        >
+          Login
+        </button>
       </h1>
     </div>
   );

@@ -27,8 +27,8 @@ const userSchema = mongoose.Schema({
     default: [],
   },
   karma: {
-    type: Array,
-    default: [],
+    type: Number,
+    default: 0,
   },
 });
 

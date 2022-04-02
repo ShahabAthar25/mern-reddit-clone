@@ -1,8 +1,14 @@
 import { XIcon } from "@heroicons/react/outline";
+import { useSelector, useDispatch } from "react-redux";
 import Login from "./Login";
 import Signup from "./Signup";
+import { closeModal } from "../../features/modalSlice";
 
-export default function Modal({ open, setOpen, view }) {
+export default function Modal() {
+  const dispatch = useDispatch();
+
+  const { open, view } = useSelector((state) => state.modal);
+
   return (
     <div
       className={
@@ -22,7 +28,7 @@ export default function Modal({ open, setOpen, view }) {
         <div className="flex-[0.8] h-full mx-2 relative flex">
           <button
             className="cursor-pointer top-2 right-0 absolute"
-            onClick={() => setOpen(!open)}
+            onClick={() => dispatch(closeModal())}
           >
             <XIcon className="h-7 text-gray-500" />
           </button>

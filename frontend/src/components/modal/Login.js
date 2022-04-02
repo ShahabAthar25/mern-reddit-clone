@@ -5,6 +5,8 @@ import {
   loginSuccess,
   loginFail,
 } from "../../features/loginSlice";
+import { switchToSignUp, closeModal } from "../../features/modalSlice";
+import { setUser } from "../../features/userSlice";
 import axios from "../../api/axios";
 
 export default function Login() {
@@ -24,14 +26,17 @@ export default function Login() {
     dispatch(loginPending());
 
     try {
-      const { data, status } = await axios.post("/auth/login", {
+      const { data } = await axios.post("/auth/login", {
         email,
         password,
       });
 
-      if (status === "error") return dispatch(loginFail(data.error));
+      sessionStorage.setItem("accessToken", data.accessToken);
+      localStorage.setItem("refreshToken", data.refreshToken);
 
+      dispatch(setUser(data));
       dispatch(loginSuccess());
+      dispatch(closeModal());
     } catch (error) {
       dispatch(loginFail(error.response.data));
     }
@@ -91,7 +96,12 @@ export default function Login() {
       </form>
       <h1 className="text-xs absolute bottom-12 mx-2">
         New to Reddit?{" "}
-        <span className="text-blue-500 font-medium uppercase">sign up</span>
+        <button
+          className="text-blue-500 font-medium uppercase"
+          onClick={() => dispatch(switchToSignUp())}
+        >
+          sign up
+        </button>
       </h1>
     </div>
   );

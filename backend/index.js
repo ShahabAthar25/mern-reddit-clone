@@ -5,10 +5,11 @@ const helmet = require("helmet");
 const cors = require("cors");
 const dotenv = require("dotenv");
 
-const authController = require("./routes/auth");
-const subRedditController = require("./routes/subReddit");
-const postController = require("./routes/post");
-const commentController = require("./routes/comment");
+const authRoute = require("./routes/auth");
+const subRedditRoute = require("./routes/subReddit");
+const postRoute = require("./routes/post");
+const commentRoute = require("./routes/comment");
+const userRoute = require("./routes/user");
 
 dotenv.config();
 
@@ -29,10 +30,11 @@ app.use(
   })
 );
 
-app.use("/api/auth", authController);
-app.use("/api/subreddit", subRedditController);
-app.use("/api/posts", postController);
-app.use("/api/comments", commentController);
+app.use("/api/auth", authRoute);
+app.use("/api/subreddit", subRedditRoute);
+app.use("/api/posts", postRoute);
+app.use("/api/comments", commentRoute);
+app.use("/api/users", userRoute);
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

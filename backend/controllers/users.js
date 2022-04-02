@@ -1,4 +1,5 @@
 const Post = require("../models/Post");
+const User = require("../models/User");
 
 const whoami = (req, res) => {
   res.json({
@@ -6,7 +7,7 @@ const whoami = (req, res) => {
     username: req.user.username,
     email: req.user.email,
     profilePic: req.user.profilePic,
-    likedPost: req.user.likedPosts,
+    likedPosts: req.user.likedPosts,
     karma: req.user.karma,
   });
 };
@@ -18,9 +19,16 @@ const getUserPosts = async (req, res) => {
 };
 
 const getUserProfile = async (req, res) => {
-  const posts = await Post.find({ ownerId: req.params.id });
+  const user = await User.findById(req.params.id);
 
-  res.json(posts);
+  res.json({
+    _id: user._id,
+    username: user.username,
+    email: user.email,
+    profilePic: user.profilePic,
+    likedPost: user.likedPosts,
+    karma: user.karma,
+  });
 };
 
 module.exports = {

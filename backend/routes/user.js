@@ -4,6 +4,7 @@ const controller = require("../controllers/users");
 const authorization = require("../middlewares/authorization");
 
 router.get("/me", authorization, controller.whoami);
-router.get("/getUserPost/:id", authorization, controller.getUserPosts);
+router.get("/posts/:id", authorization, controller.getUserPosts);
+router.get("/profile/:id", authorization, controller.getUserPosts);
 
 module.exports = router;

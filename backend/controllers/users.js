@@ -17,7 +17,14 @@ const getUserPosts = async (req, res) => {
   res.json(posts);
 };
 
+const getUserProfile = async (req, res) => {
+  const posts = await Post.find({ ownerId: req.params.id });
+
+  res.json(posts);
+};
+
 module.exports = {
   whoami,
   getUserPosts,
+  getUserProfile,
 };

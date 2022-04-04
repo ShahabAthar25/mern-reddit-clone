@@ -46,3 +46,19 @@ module.exports.commentValidation = (data) => {
 
   return schema.validate(data);
 };
+
+module.exports.emailValidation = (data) => {
+  const schema = Joi.object({
+    email: Joi.string().min(3).max(60).email(),
+  });
+
+  return schema.validate(data);
+};
+
+module.exports.usernameValidation = (data) => {
+  const schema = Joi.object({
+    username: Joi.string().min(3).max(60),
+  });
+
+  return schema.validate(data);
+};

@@ -3,6 +3,7 @@ const bcrypt = require("bcrypt");
 const { emailValidation, usernameValidation } = require("../utils/validation");
 const Post = require("../models/Post");
 const User = require("../models/User");
+const Comment = require("../models/Comment");
 
 const whoami = (req, res) => {
   res.json({
@@ -48,10 +49,8 @@ const updateUser = async (req, res) => {
     }
 
     if (req.body.email) {
-      console.log("first");
       const { error } = emailValidation({ email: req.body.email });
       if (error) return res.status(400).json(error.details[0].message);
-      console.log("first");
     }
 
     if (req.body.password) {
@@ -70,9 +69,33 @@ const updateUser = async (req, res) => {
   }
 };
 
+const deleteUser = async (req, res) => {
+  try {
+    await User.deleteOne({ _id: req.user._id });
+    await Post.updateMany(
+      { ownerId: req.user._id },
+      {
+        $set: { owner: "(deleted)", ownerId: "(deleted)" },
+      }
+    );
+    await Comment.updateMany(
+      { ownerId: req.user._id },
+      {
+        $set: { owner: "(deleted)", ownerId: "(deleted)" },
+      }
+    );
+
+    res.json("Account Successfully Deleted.");
+  } catch (error) {
+    res.sendStatus(500);
+    console.log(error);
+  }
+};
+
 module.exports = {
   whoami,
   getUserPosts,
   getUserProfile,
   updateUser,
+  deleteUser,
 };

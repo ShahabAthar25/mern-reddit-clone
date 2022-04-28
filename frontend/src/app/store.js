@@ -3,6 +3,7 @@ import loginReducer from "../features/loginSlice";
 import modalReducer from "../features/modalSlice";
 import registerReducer from "../features/registerSlice";
 import userReducer from "../features/userSlice";
+import postReducer from "../features/postSlice";
 
 const store = configureStore({
   reducer: {
@@ -10,6 +11,7 @@ const store = configureStore({
     register: registerReducer,
     modal: modalReducer,
     user: userReducer,
+    post: postReducer,
   },
 });
 

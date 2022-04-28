@@ -3,7 +3,7 @@ const router = require("express").Router();
 const controller = require("../controllers/post");
 const authorization = require("../middlewares/authorization");
 
-router.get("/recommendations", authorization, controller.getRecommendation);
+router.get("/recommendations", controller.getRecommendation);
 router.get("/:id", controller.getPost);
 router.post("/", authorization, controller.createPost);
 router.put("/:id", authorization, controller.updatePost);

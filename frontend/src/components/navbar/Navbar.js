@@ -63,7 +63,7 @@ export default function Navbar() {
     <div className="flex items-center justify-between px-5 py-2 bg-white dark:bg-[#1A1A1B]">
       <div className="flex items-center space-x-2">
         <LogoImg className="h-8" />
-        <LogoText className="h-5 hidden sm:flex fill-black" />
+        <LogoText className="h-5 hidden sm:flex fill-black dark:fill-white" />
       </div>
       <form className="flex flex-grow mx-4 items-center px-3 bg-[#f4f4f49c] rounded-sm hover:ring-1 dark:ring-white hover:bg-white dark:bg-[#272729] max-w-3xl">
         <button
@@ -83,7 +83,7 @@ export default function Navbar() {
         {!isAuth && (
           <div className="flex space-x-4">
             <button
-              className="ring-1 text-blue-700 font-medium rounded-full py-1 px-10 hidden sm:flex hover:bg-blue-100"
+              className="ring-1 dark:ring-white text-blue-700 dark:text-white font-bold rounded-full py-1 px-10 hidden sm:flex hover:bg-blue-100"
               onClick={() => {
                 dispatch(switchToLogin());
                 dispatch(openModal());
@@ -92,7 +92,7 @@ export default function Navbar() {
               Log In
             </button>
             <button
-              className="bg-blue-500 text-white font-medium rounded-full py-1 px-10 hidden sm:flex hover:bg-blue-400"
+              className="bg-blue-500 text-white font-bold rounded-full py-1 px-10 hidden sm:flex hover:bg-blue-400"
               onClick={() => {
                 dispatch(switchToSignUp());
                 dispatch(openModal());
@@ -110,7 +110,7 @@ export default function Navbar() {
           <ChevronDownIcon className="h-4 text-gray-400" />
           {openMenu && (
             <div
-              className={`absolute right-0 top-10 mt-2 w-[40%] sm:w-[25%] md:w-[20%] lg:w-[15%] bg-white dark:bg-black rounded-sm ${
+              className={`absolute right-0 top-10 mt-2 w-[40%] sm:w-[25%] md:w-[20%] lg:w-[15%] bg-white dark:bg-black rounded-sm z-50 ${
                 isAuth && `overflow-y-scroll h-80%`
               }`}
             >

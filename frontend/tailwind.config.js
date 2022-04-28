@@ -43,9 +43,9 @@ module.exports = {
         "90%": "90vh",
         "95%": "95vh",
       },
-      // minWidth: {
-
-      // }
+      fontFamily: {
+        body: ['Roboto']
+      }
     },
   },
   plugins: [],

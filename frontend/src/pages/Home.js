@@ -1,13 +1,44 @@
-import Navbar from "../components/navbar/Navbar";
 import Card from "../components/card/Card";
+import { useEffect } from "react";
+import axios from "../api/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { postFail, postPending, postSuccess } from "../features/postSlice";
 
 export default function Home() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(postPending());
+
+    const fetchPosts = async () => {
+      try {
+        const { data } = await axios.get("/posts/recommendations");
+
+        dispatch(postSuccess(data));
+      } catch (error) {
+        console.log(error);
+        dispatch(postFail(error.response.data));
+      }
+    };
+
+    fetchPosts();
+  }, [dispatch]);
+
+  const posts = useSelector((state) => state.posts);
+
   return (
-    <div className="bg-[#DAE0E6] dark:bg-[#030303] h-screen w-screen">
-      <Navbar />
-      <div className="w-full flex justify-center mt-10 z-0">
-        <Card upVotes={1234} subReddit={"AskReddit"} user={"Shahab"} text={"So what is your number #1 excuse for being a dissapointment that you tell your parents, mine is I am the brother of sajawal hassan"} />
-      </div>
+    <div className="w-full flex items-center flex-col pt-10 z-0 space-y-2">
+      {posts.data.map((post) => {
+        return (
+          <Card
+            key={post._id}
+            upVotes={post.upVotes.length - post.downVotes.length}
+            subReddit={post.subReddit}
+            user={post.owner}
+            text={post.title}
+          />
+        );
+      })}
     </div>
   );
 }

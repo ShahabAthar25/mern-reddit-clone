@@ -55,7 +55,7 @@ export default function Login() {
       </div>
       <form className="space-y-3 flex flex-col mx-2 bottom-20 absolute w-full">
         <input
-          type="text"
+          type="email"
           placeholder="Email"
           className="max-w-xs px-3 py-3 bg-[#fcfcfb] ring-1 ring-gray-300 rounded outline-none text-gray-500 flex-grow mr-4"
           autoComplete="email"

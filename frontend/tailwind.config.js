@@ -44,8 +44,11 @@ module.exports = {
         "95%": "95vh",
       },
       fontFamily: {
-        body: ['Roboto']
-      }
+        body: ["Roboto"],
+      },
+      screens: {
+        xs: "375px",
+      },
     },
   },
   plugins: [],

@@ -18,10 +18,12 @@ import {
   UserCircleIcon,
   PlusIcon,
   CogIcon,
+  ClipboardListIcon,
 } from "@heroicons/react/outline";
 import Switch from "@mui/material/Switch";
 import { useDispatch, useSelector } from "react-redux";
-import MenuOption from "./MenuOption";
+import { Link } from "react-router-dom";
+import MenuOption from "../MenuOption";
 import Modal from "../modal/Modal";
 import useDarkMode from "../../hooks/useDarkMode";
 import {
@@ -61,10 +63,21 @@ export default function Navbar() {
 
   return (
     <div className="flex items-center justify-between px-5 py-2 bg-white dark:bg-[#1A1A1B]">
-      <div className="flex items-center space-x-2">
+      <Link to="/" className="flex items-center space-x-2">
         <LogoImg className="h-8" />
         <LogoText className="h-5 hidden sm:flex fill-black dark:fill-white" />
-      </div>
+      </Link>
+      {isAuth && (
+        <Link
+          to="/create"
+          className="ml-4 hidden md:flex items-center hover:ring-1 hover:ring-gray-300 min-w-[10rem] py-1 space-x-4 cursor-pointer"
+        >
+          <PlusIcon className="h-6 text-gray-600 dark:text-white" />
+          <h1 className="font-body text-gray-600 dark:text-white text-center">
+            Create Post
+          </h1>
+        </Link>
+      )}
       <form className="flex flex-grow mx-4 items-center px-3 bg-[#f4f4f49c] rounded-sm hover:ring-1 dark:ring-white hover:bg-white dark:bg-[#272729] max-w-3xl">
         <button
           type="submit"
@@ -110,7 +123,7 @@ export default function Navbar() {
           <ChevronDownIcon className="h-4 text-gray-400" />
           {openMenu && (
             <div
-              className={`absolute right-0 top-10 mt-2 w-[40%] sm:w-[25%] md:w-[20%] lg:w-[15%] bg-white dark:bg-black rounded-sm z-50 ${
+              className={`absolute right-0 top-10 mt-2 w-[40%] sm:w-[25%] md:w-[20%] lg:w-[15%] bg-white dark:bg-[#1A1A1B] rounded-sm z-50 ${
                 isAuth && `overflow-y-scroll h-80%`
               }`}
             >
@@ -129,6 +142,7 @@ export default function Navbar() {
                     <MenuOption text="Profile" Icon={UserCircleIcon} />
                     <MenuOption text="Create Avatar" Icon={PlusIcon} />
                     <MenuOption text="User Settings" Icon={CogIcon} />
+                    <MenuOption text="Create Post" Icon={ClipboardListIcon} />
                   </div>
                 </div>
               )}

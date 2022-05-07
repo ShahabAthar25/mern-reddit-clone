@@ -11,7 +11,7 @@ const store = configureStore({
     register: registerReducer,
     modal: modalReducer,
     user: userReducer,
-    post: postReducer,
+    posts: postReducer,
   },
 });
 

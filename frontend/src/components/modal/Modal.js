@@ -13,7 +13,7 @@ export default function Modal() {
     <div
       className={
         open
-          ? `bg-black bg-opacity-50 absolute inset-0 flex items-center justify-center`
+          ? `bg-black bg-opacity-50 absolute inset-0 flex items-center justify-center z-50`
           : `hidden`
       }
     >

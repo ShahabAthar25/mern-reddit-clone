@@ -1,9 +1,64 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import axios, { axiosAuth } from "../api/axios";
+import { postCreate, postFail, postPending } from "../features/postSlice";
+import {
+  subRedditFail,
+  subRedditPending,
+  subRedditSuccess,
+} from "../features/subRedditSlice";
+import { Link } from "react-router-dom";
+import useRefreshToken from "../hooks/useRefreshToken";
 import subRedditIcon from "../images/subreddit.png";
+import MenuOption from "../components/subReddit/MenuOption";
 
 export default function CreatePost() {
+  const dispatch = useDispatch();
+
   const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [subRedditId, setSubRedditId] = useState("");
+
+  const token = localStorage.getItem("refreshToken");
+
+  const subReddits = useSelector((state) => state.subReddit);
+
+  useEffect(() => {
+    const fetchSubReddit = async () => {
+      dispatch(subRedditPending());
+
+      try {
+        const { data } = await axiosAuth.get("/subreddit");
+
+        dispatch(subRedditSuccess(data));
+        console.log(data);
+      } catch (error) {
+        console.log(error.response.status);
+        dispatch(subRedditFail(error.response.data));
+      }
+    };
+
+    fetchSubReddit();
+  }, [dispatch, token]);
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+
+    dispatch(postPending());
+    try {
+      const { data } = await axios.post("/posts", {
+        title,
+        body,
+        subRedditId,
+      });
+
+      dispatch(postCreate(data));
+    } catch (error) {
+      dispatch(postFail(error.response.data));
+    }
+  };
 
   return (
     <div className="m-auto w-full max-w-3xl space-y-4 mt-10">
@@ -21,7 +76,11 @@ export default function CreatePost() {
           <ChevronDownIcon className="h-6 text-gray-600" />
         </button>
         {open && (
-          <div className="absolute bg-white p-4 border rounded-md w-full max-w-xs"></div>
+          <div className="absolute bg-white border rounded-md w-full max-w-xs">
+            {subReddits.data.map((subReddit) => {
+              return <MenuOption />;
+            })}
+          </div>
         )}
       </div>
       <form className="bg-white rounded-md px-4 py-3 space-y-4">
@@ -29,15 +88,26 @@ export default function CreatePost() {
           type="text"
           className="bg-transparent px-3 py-2 border rounded-md border-gray-500 text-gray-500 w-full outline-0"
           placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
         />
         <textarea
           className="bg-transparent px-3 py-2 border rounded-md border-gray-500 text-gray-500 w-full outline-0 h-48 resize-none"
           placeholder="Text(Optional)"
+          value={body}
+          onChange={(e) => setBody(e.target.value)}
         />
-        <div className="w-full flex justify-end">
+        <div className="w-full flex justify-end space-x-4">
+          <Link
+            to="/"
+            className="px-8 py-2 bg-white border border-gray-500 text-gray-500 hover:bg-gray-100 duration-200 rounded-full"
+          >
+            Cancel
+          </Link>
           <button
             type="submit"
-            className="px-8 py-2 bg-[#E8F2FB] border border-[#207BC9] rounded-full"
+            className="px-8 py-2 bg-[#E8F2FB] border border-[#207BC9] rounded-full text-gray-700 hover:bg-[#eaf2f8b6] duration-200"
+            onClick={(e) => handleOnSubmit(e)}
           >
             Post
           </button>

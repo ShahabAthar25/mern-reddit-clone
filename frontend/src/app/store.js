@@ -4,6 +4,7 @@ import modalReducer from "../features/modalSlice";
 import registerReducer from "../features/registerSlice";
 import userReducer from "../features/userSlice";
 import postReducer from "../features/postSlice";
+import subRedditReducer from "../features/subRedditSlice";
 
 const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
     modal: modalReducer,
     user: userReducer,
     posts: postReducer,
+    subReddit: subRedditReducer,
   },
 });
 

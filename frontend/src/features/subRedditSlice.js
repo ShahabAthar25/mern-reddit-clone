@@ -7,28 +7,33 @@ const initialState = {
 };
 
 const loginSlice = createSlice({
-  name: "post",
+  name: "subReddit",
   initialState,
   reducers: {
-    postPending: (state) => {
+    subRedditPending: (state) => {
       state.isLoading = true;
     },
-    postSuccess: (state, { payload }) => {
+    subRedditSuccess: (state, { payload }) => {
       state.data = payload;
       state.isLoading = false;
       state.error = "";
     },
-    postFail: (state, { payload }) => {
+    subRedditFail: (state, { payload }) => {
       state.isLoading = false;
       state.error = payload;
     },
-    postCreate: (state, { payload }) => {
+    subRedditCreate: (state, { payload }) => {
       state.data.push(payload);
     },
   },
 });
 
 const { reducer, actions } = loginSlice;
-export const { postPending, postSuccess, postFail, postCreate } = actions;
+export const {
+  subRedditPending,
+  subRedditSuccess,
+  subRedditFail,
+  subRedditCreate,
+} = actions;
 
 export default reducer;

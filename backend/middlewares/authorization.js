@@ -6,7 +6,10 @@ module.exports = function (req, res, next) {
   if (!token) return res.status(401).json("Access denied");
 
   jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, async (err, user) => {
-    if (err) return res.sendStatus(403);
+    if (err) {
+      console.log(err);
+      return res.sendStatus(403);
+    }
 
     req.user = user;
     next();

@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import axios, { axiosAuth } from "../api/axios";
+import { axiosAuth } from "../api/axios";
 import { postCreate, postFail, postPending } from "../features/postSlice";
 import {
   subRedditFail,
@@ -20,8 +20,9 @@ export default function CreatePost() {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
   const [subRedditId, setSubRedditId] = useState("");
+  const [subRedditText, setSubRedditText] = useState("Choose A Community");
 
-  const token = localStorage.getItem("refreshToken");
+  const refreshToken = useRefreshToken();
 
   const subReddits = useSelector((state) => state.subReddit);
 
@@ -33,7 +34,6 @@ export default function CreatePost() {
         const { data } = await axiosAuth.get("/subreddit");
 
         dispatch(subRedditSuccess(data));
-        console.log(data);
       } catch (error) {
         console.log(error.response.status);
         dispatch(subRedditFail(error.response.data));
@@ -41,14 +41,14 @@ export default function CreatePost() {
     };
 
     fetchSubReddit();
-  }, [dispatch, token]);
+  }, [dispatch]);
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
     dispatch(postPending());
     try {
-      const { data } = await axios.post("/posts", {
+      const { data } = await axiosAuth.post("/posts", {
         title,
         body,
         subRedditId,
@@ -56,6 +56,9 @@ export default function CreatePost() {
 
       dispatch(postCreate(data));
     } catch (error) {
+      if (error.response.status !== 403)
+        return dispatch(postFail(error.response.data));
+
       dispatch(postFail(error.response.data));
     }
   };
@@ -71,14 +74,24 @@ export default function CreatePost() {
         >
           <div className="flex items-center space-x-2">
             <img src={subRedditIcon} alt="SubReddit" className="h-6" />
-            <h1 className="font-body text-gray-800">Choose A Community</h1>
+            <h1 className="font-body text-gray-800">{subRedditText}</h1>
           </div>
           <ChevronDownIcon className="h-6 text-gray-600" />
         </button>
         {open && (
           <div className="absolute bg-white border rounded-md w-full max-w-xs">
             {subReddits.data.map((subReddit) => {
-              return <MenuOption />;
+              return (
+                <MenuOption
+                  key={subReddit._id}
+                  name={subReddit.name}
+                  bannerPic={subReddit.bannerPic}
+                  id={subReddit._id}
+                  setSubRedditId={setSubRedditId}
+                  setOpen={setOpen}
+                  setSubRedditText={setSubRedditText}
+                />
+              );
             })}
           </div>
         )}
@@ -86,13 +99,13 @@ export default function CreatePost() {
       <form className="bg-white rounded-md px-4 py-3 space-y-4">
         <input
           type="text"
-          className="bg-transparent px-3 py-2 border rounded-md border-gray-500 text-gray-500 w-full outline-0"
+          className="bg-transparent px-3 py-2 border rounded-md border-gray-500 text-gray-800 w-full outline-0"
           placeholder="Title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
         <textarea
-          className="bg-transparent px-3 py-2 border rounded-md border-gray-500 text-gray-500 w-full outline-0 h-48 resize-none"
+          className="bg-transparent px-3 py-2 border rounded-md border-gray-500 text-gray-800 w-full outline-0 h-48 resize-none"
           placeholder="Text(Optional)"
           value={body}
           onChange={(e) => setBody(e.target.value)}

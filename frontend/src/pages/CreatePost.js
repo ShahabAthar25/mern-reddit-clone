@@ -1,7 +1,7 @@
 import { ChevronDownIcon } from "@heroicons/react/outline";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { axiosAuth } from "../api/axios";
+import axios, { axiosAuth } from "../api/axios";
 import { postCreate, postFail, postPending } from "../features/postSlice";
 import {
   subRedditFail,
@@ -9,7 +9,6 @@ import {
   subRedditSuccess,
 } from "../features/subRedditSlice";
 import { Link } from "react-router-dom";
-import useRefreshToken from "../hooks/useRefreshToken";
 import subRedditIcon from "../images/subreddit.png";
 import MenuOption from "../components/subReddit/MenuOption";
 
@@ -22,8 +21,6 @@ export default function CreatePost() {
   const [subRedditId, setSubRedditId] = useState("");
   const [subRedditText, setSubRedditText] = useState("Choose A Community");
 
-  const refreshToken = useRefreshToken();
-
   const subReddits = useSelector((state) => state.subReddit);
 
   useEffect(() => {
@@ -31,7 +28,7 @@ export default function CreatePost() {
       dispatch(subRedditPending());
 
       try {
-        const { data } = await axiosAuth.get("/subreddit");
+        const { data } = await axios.get("/subreddit");
 
         dispatch(subRedditSuccess(data));
       } catch (error) {
@@ -48,18 +45,19 @@ export default function CreatePost() {
 
     dispatch(postPending());
     try {
-      const { data } = await axiosAuth.post("/posts", {
-        title,
-        body,
-        subRedditId,
+      const { data } = await axiosAuth({
+        url: "/posts",
+        method: "post",
+        data: {
+          title,
+          body,
+          subRedditId,
+        },
       });
 
       dispatch(postCreate(data));
     } catch (error) {
-      if (error.response.status !== 403)
-        return dispatch(postFail(error.response.data));
-
-      dispatch(postFail(error.response.data));
+      return dispatch(postFail(error.response.message));
     }
   };
 

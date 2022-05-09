@@ -3,7 +3,7 @@ const router = require("express").Router();
 const controller = require("../controllers/subReddit");
 const authorization = require("../middlewares/authorization");
 
-router.get("/", authorization, controller.getSubReddit);
+router.get("/", controller.getSubReddit);
 router.get("/:id", controller.getSubRedditById);
 router.post("/", authorization, controller.createSubReddit);
 router.put("/:id", authorization, controller.updateSubReddit);

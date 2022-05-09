@@ -16,7 +16,6 @@ export default function Home() {
 
         dispatch(postSuccess(data));
       } catch (error) {
-        console.log(error);
         dispatch(postFail(error.response.data));
       }
     };
@@ -25,6 +24,7 @@ export default function Home() {
   }, [dispatch]);
 
   const posts = useSelector((state) => state.posts);
+  console.log(posts);
 
   return (
     <div className="w-full flex items-center flex-col pt-10 z-0 space-y-2">

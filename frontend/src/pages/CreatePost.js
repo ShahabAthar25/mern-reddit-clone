@@ -8,11 +8,12 @@ import {
   subRedditPending,
   subRedditSuccess,
 } from "../features/subRedditSlice";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import subRedditIcon from "../images/subreddit.png";
 import MenuOption from "../components/subReddit/MenuOption";
 
 export default function CreatePost() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
@@ -22,6 +23,7 @@ export default function CreatePost() {
   const [subRedditText, setSubRedditText] = useState("Choose A Community");
 
   const subReddits = useSelector((state) => state.subReddit);
+  const { isAuth } = useSelector((state) => state.login);
 
   useEffect(() => {
     const fetchSubReddit = async () => {
@@ -38,7 +40,7 @@ export default function CreatePost() {
     };
 
     fetchSubReddit();
-  }, [dispatch]);
+  }, [dispatch, navigate]);
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
@@ -56,10 +58,15 @@ export default function CreatePost() {
       });
 
       dispatch(postCreate(data));
+      navigate("/");
     } catch (error) {
       return dispatch(postFail(error.response.message));
     }
   };
+
+  if (!isAuth) {
+    navigate("/");
+  }
 
   return (
     <div className="m-auto w-full max-w-3xl space-y-4 mt-10">

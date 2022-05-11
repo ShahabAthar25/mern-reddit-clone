@@ -19,13 +19,13 @@ export default function Card({ upVotes, subReddit, user, text, comments }) {
         <img
           src={voteIcon}
           alt="UpVote"
-          className="h-8 grayscale hover:bg-gray-300 p-1 hover:grayscale-0 cursor-pointer dark:brightness-0 dark:invert"
+          className="h-8 grayscale hover:bg-gray-300 p-1 cursor-pointer"
         />
         <h1 className="font-bold text-gray-600 dark:text-white">{upVotes}</h1>
         <img
           src={voteIcon}
           alt="DownVote"
-          className="h-8 grayscale hover:bg-gray-300 p-1 hover:grayscale-0 cursor-pointer dark:brightness-0 dark:invert rotate-180"
+          className="h-8 grayscale hover:bg-gray-300 p-1 cursor-pointer rotate-180"
         />
       </div>
       <div className="flex-[0.95] relative">
@@ -34,7 +34,7 @@ export default function Card({ upVotes, subReddit, user, text, comments }) {
           <span className="font-bold text-gray-800 dark:text-white">
             r/{subReddit}
           </span>{" "}
-          <span className="text-sm text-gray-600 ml-2 flex truncate">
+          <span className="text-sm text-[#565858] ml-2 flex truncate">
             . Posted by u/{user}{" "}
             <span className="hidden xs:flex ml-1">23 hours ago</span>
           </span>
@@ -60,29 +60,29 @@ export default function Card({ upVotes, subReddit, user, text, comments }) {
               />
             </div>
             <div className="flex items-center mr-4">
-              <ChatAltIcon className="h-6 text-gray-400" />
-              <span className="text-sm font-bold text-gray-600">
+              <ChatAltIcon className="h-6 text-[#565858]" />
+              <span className="text-sm font-bold text-[#565858]">
                 {comments} Comments
               </span>
             </div>
             <div className="hidden sm:flex items-center mr-4">
-              <GiftIcon className="h-6 text-gray-400" />
-              <span className="text-sm font-bold text-gray-600">Award</span>
+              <GiftIcon className="h-6 text-[#565858]" />
+              <span className="text-sm font-bold text-[#565858]">Award</span>
             </div>
             <div className="hidden sm:flex items-center mr-4">
-              <ShareIcon className="h-6 text-gray-400" />
-              <span className="text-sm font-bold text-gray-600">Share</span>
+              <ShareIcon className="h-6 text-[#565858]" />
+              <span className="text-sm font-bold text-[#565858]">Share</span>
             </div>
             <div className="hidden sm:flex items-center mr-4">
-              <BookmarkIcon className="h-6 text-gray-400" />
-              <span className="text-sm font-bold text-gray-600">Save</span>
+              <BookmarkIcon className="h-6 text-[#565858]" />
+              <span className="text-sm font-bold text-[#565858]">Save</span>
             </div>
             <div className="relative">
               <button
                 className="flex sm:hidden items-center mr-4"
                 onClick={() => setOpen(!open)}
               >
-                <DotsHorizontalIcon className="h-6 text-gray-400" />
+                <DotsHorizontalIcon className="h-6 text-[#565858]" />
               </button>
               {open && (
                 <div className="absolute bg-white min-w-[7rem] rounded-md shadow-lg border flex flex-col sm:hidden">

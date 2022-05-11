@@ -51,6 +51,8 @@ export default function Navbar() {
       await axios.delete("/auth/logout");
 
       dispatch(logout());
+      localStorage.removeItem("refreshToken");
+      sessionStorage.removeItem("accessToken");
     } catch (error) {
       dispatch(loginFail(error.response.data));
     }
@@ -62,7 +64,7 @@ export default function Navbar() {
   };
 
   return (
-    <div className="flex items-center justify-between px-5 py-2 bg-white dark:bg-[#1A1A1B]">
+    <div className="flex items-center justify-between px-4 py-2 bg-white dark:bg-[#1A1A1B]">
       <Link to="/" className="flex items-center space-x-2">
         <LogoImg className="h-8" />
         <LogoText className="h-5 hidden sm:flex fill-black dark:fill-white" />

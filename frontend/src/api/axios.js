@@ -25,7 +25,7 @@ export const axiosAuth = ({ ...options }) => {
 
       const newRefreshToken = refresh();
 
-      localStorage.setItem("accessToken", newRefreshToken);
+      sessionStorage.setItem("accessToken", newRefreshToken);
       return client({ ...options });
     }
 
